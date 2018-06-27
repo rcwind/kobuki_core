@@ -93,6 +93,7 @@ namespace kobuki {
 
     if((mid & DockStationIRState::FAR_CENTER) || (mid & DockStationIRState::NEAR_CENTER))
     {
+        printf("~~~~~~~~~~~~~~~~~>>scan Aligned\r\n");
       next_state = RobotDockingState::ALIGNED;
       next_vx = 0.05;
       next_wz = 0.0;
@@ -121,6 +122,7 @@ namespace kobuki {
     }
     else if(std::abs(rotated) > 1.0)
     {
+        printf("~~~~~~~~~~~~~~~~~>>start find stream\r\n");
       next_state = RobotDockingState::FIND_STREAM;
       next_vx = 0;
       next_wz = 0;
@@ -157,7 +159,7 @@ namespace kobuki {
       // turn right, CW until get right signal from left sensor
       if(left & (DockStationIRState::FAR_RIGHT + DockStationIRState::NEAR_RIGHT)) {
         next_state = RobotDockingState::GET_STREAM;
-        next_vx = 0.5;
+        next_vx = 0.05;
         next_wz = 0.0;
       }
       else {
@@ -172,7 +174,7 @@ namespace kobuki {
       if(right & (DockStationIRState::FAR_LEFT + DockStationIRState::NEAR_LEFT))
       {
         next_state = RobotDockingState::GET_STREAM;
-        next_vx = 0.5;
+        next_vx = 0.05;
         next_wz = 0.0;
       }
       else {
@@ -206,6 +208,7 @@ namespace kobuki {
 
     if(dock_detector > 0) { // robot is located in right side of dock
       if (left & (DockStationIRState::FAR_LEFT + DockStationIRState::NEAR_LEFT)) {
+        printf("~~~~~~~~~~~~~~~~~>>left sensor get left signal, scan...\r\n");
         dock_detector = 0;
         rotated = 0;
         next_state = RobotDockingState::SCAN;
@@ -220,6 +223,7 @@ namespace kobuki {
     }
     else if(dock_detector < 0) { // robot is located left side of dock
       if(right & (DockStationIRState::FAR_RIGHT + DockStationIRState::NEAR_RIGHT)) {
+        printf("~~~~~~~~~~~~~~~~~>>right sensor get right signal, scan...\r\n");
         dock_detector = 0;
         rotated = 0;
         next_state = RobotDockingState::SCAN;
@@ -260,36 +264,42 @@ namespace kobuki {
     {
       if(((mid & DockStationIRState::NEAR) == DockStationIRState::NEAR_CENTER) || ((mid & DockStationIRState::NEAR) == DockStationIRState::NEAR))
       {
+        printf("~~~~~~~~~~~~~~~~~>>Aligned near center\n");
         debug_str = "AlignedNearCenter";
         next_state = RobotDockingState::ALIGNED_NEAR;
         next_vx = 0.05;
         next_wz = 0.0;
       }
       else if(mid & DockStationIRState::NEAR_LEFT) {
+        printf("~~~~~~~~~~~~~~~~~>>mid catch near left\n");
         debug_str = "AlignedNearLeft";
         next_state = RobotDockingState::ALIGNED_NEAR;
         next_vx = 0.05;
         next_wz = 0.1;
       }
       else if(mid & DockStationIRState::NEAR_RIGHT) {
+        printf("~~~~~~~~~~~~~~~~~>>mid catch near right\n");
         debug_str = "AlignedNearRight";
         next_state = RobotDockingState::ALIGNED_NEAR;
         next_vx = 0.05;
         next_wz = -0.1;
       }
       else if(((mid & DockStationIRState::FAR) == DockStationIRState::FAR_CENTER) || ((mid & DockStationIRState::FAR) == DockStationIRState::FAR)) {
+        printf("~~~~~~~~~~~~~~~~~>>Aligned far center\n");
         debug_str = "AlignedFarCenter";
         next_state = RobotDockingState::ALIGNED_FAR;
         next_vx = 0.1;
         next_wz = 0.0;
       }
       else if(mid & DockStationIRState::FAR_LEFT) {
+        printf("~~~~~~~~~~~~~~~~~>>mid catch far left\n");
         debug_str = "AlignedFarLeft";
         next_state = RobotDockingState::ALIGNED_FAR;
         next_vx = 0.1;
         next_wz = 0.3;
       }
       else if(mid & DockStationIRState::FAR_RIGHT) {
+        printf("~~~~~~~~~~~~~~~~~>>mid catch far right\n");
         debug_str = "AlignedFarRight";
         next_state = RobotDockingState::ALIGNED_FAR;
         next_vx = 0.1;
