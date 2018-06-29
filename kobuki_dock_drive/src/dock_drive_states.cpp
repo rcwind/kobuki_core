@@ -116,6 +116,7 @@ namespace kobuki {
     }
     // robot is located in front of robot
     else if(mid) { // if mid sensor sees something, rotate slowly
+        printf(">>>>>>>mid see something\r\n");
       next_state = RobotDockingState::SCAN;
       next_vx = 0.0;
       next_wz = 0.10;
@@ -159,6 +160,7 @@ namespace kobuki {
       // turn right, CW until get right signal from left sensor
       if(left & (DockStationIRState::FAR_RIGHT + DockStationIRState::NEAR_RIGHT)) {
         next_state = RobotDockingState::GET_STREAM;
+        printf("=============left sensor get right signal, next forward\r\n");
         next_vx = 0.05;
         next_wz = 0.0;
       }
@@ -173,6 +175,7 @@ namespace kobuki {
       // turn left, CCW until get left signal from right sensor
       if(right & (DockStationIRState::FAR_LEFT + DockStationIRState::NEAR_LEFT))
       {
+        printf("=============right sensor get left signal, next forward\r\n");
         next_state = RobotDockingState::GET_STREAM;
         next_vx = 0.05;
         next_wz = 0.0;
@@ -208,7 +211,7 @@ namespace kobuki {
 
     if(dock_detector > 0) { // robot is located in right side of dock
       if (left & (DockStationIRState::FAR_LEFT + DockStationIRState::NEAR_LEFT)) {
-        printf("~~~~~~~~~~~~~~~~~>>left sensor get left signal, scan...\r\n");
+        printf("~~~~~~~~~~~~~~~~~>>left sensor get left signal, next scan\n");
         dock_detector = 0;
         rotated = 0;
         next_state = RobotDockingState::SCAN;
@@ -223,7 +226,7 @@ namespace kobuki {
     }
     else if(dock_detector < 0) { // robot is located left side of dock
       if(right & (DockStationIRState::FAR_RIGHT + DockStationIRState::NEAR_RIGHT)) {
-        printf("~~~~~~~~~~~~~~~~~>>right sensor get right signal, scan...\r\n");
+        printf("~~~~~~~~~~~~~~~~~>>right sensor get right signal, next scan\n");
         dock_detector = 0;
         rotated = 0;
         next_state = RobotDockingState::SCAN;
